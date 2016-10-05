@@ -1,3 +1,9 @@
+name := "AWS Lambda Jersey Adapter"
+
+version := "1.0"
+
+scalaVersion := "2.11.7"
+
 libraryDependencies += "javax.servlet" % "javax.servlet-api" % "3.1.0"
 
 libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet" % "2.23.2"
