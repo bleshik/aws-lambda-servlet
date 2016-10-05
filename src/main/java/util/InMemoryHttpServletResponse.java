@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * HTTP response implementation storing all the data in memory without actually writing anywhere.
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings({"unchecked", "deprecation"})
 public class InMemoryHttpServletResponse implements HttpServletResponse {
     private final Collection<Cookie> cookies = new ArrayList<>();
     private final Map<String, Set<Object>> headers = new HashMap<>();

@@ -36,6 +36,7 @@ import javax.servlet.http.Part;
 /**
  * Wraps the "pass-through" AWS Lambda parameters into an HTTP request.
  */
+@SuppressWarnings("unchecked")
 public class LambdaHttpServletRequest implements HttpServletRequest {
 
     private Map<String, Map<String, String>> params;
