@@ -1,6 +1,6 @@
 libraryDependencies += "javax.servlet" % "javax.servlet-api" % "3.1.0"
 
-libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet" % "2.6"
+libraryDependencies += "org.glassfish.jersey.containers" % "jersey-container-servlet" % "2.23.2"
 
 libraryDependencies += "com.amazonaws" % "aws-lambda-java-core" % "1.1.0"
 
