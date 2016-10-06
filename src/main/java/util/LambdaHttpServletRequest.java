@@ -46,13 +46,25 @@ public class LambdaHttpServletRequest implements HttpServletRequest {
     private Map<String, String> header;
     private String body;
 
-    public LambdaHttpServletRequest(Map<String, Object> lambdaProxyParams) {
-        this.input       = (Map<String, Object>) lambdaProxyParams.get("input");
-        this.context     = (Map<String, Object>) input.get("requestContext");
-        this.identity    = (Map<String, String>) context.get("identity");
+    public LambdaHttpServletRequest(Map<String, Object> input) {
+        this.input = input;
+        this.context = (Map<String, Object>) input.get("requestContext");
+        if (this.context == null) {
+            this.context = new HashMap<>();
+        }
+        this.identity = (Map<String, String>) context.get("identity");
+        if (this.identity == null) {
+            this.identity = new HashMap<>();
+        }
         this.querystring = (Map<String, String>) input.get("queryStringParameters");
-        this.header      = (Map<String, String>) input.get("headers");
-        this.body        = (String) input.get("body");
+        if (this.querystring == null) {
+            this.querystring = new HashMap<>();
+        }
+        this.header = (Map<String, String>) input.get("headers");
+        if (this.header == null) {
+            this.header = new HashMap<>();
+        }
+        this.body = (String) input.get("body");
         if (this.body == null) {
             this.body = "";
         }
