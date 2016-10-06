@@ -35,20 +35,17 @@ public class JerseyRequestHandlerSpec {
         assertEquals(
             new TestResource().test(),
             new JerseyRequestHandler(TestResource.class).handleRequest(new HashMap<String, Object>() {{
-                put("body-json", new HashMap());
-                put("params", new HashMap<String, Object>(){{
-                    put("path", new HashMap<String, String>(){{
-                        put("path1", "test");
+                put("input", new HashMap<String, Object>() {{
+                    put("body", null);
+                    put("path", "/test");
+                    put("httpMethod", "GET");
+                    put("headers", new HashMap<String, String>());
+                    put("queryStringParameters", new HashMap<String, String>());
+                    put("requestContext", new HashMap<String, String>(){{
+                        put("sourceIp", "test-invoke-source-ip");
                     }});
-                    put("querystring", new HashMap<String, String>());
-                    put("header", new HashMap<String, String>());
                 }});
-                put("context", new HashMap<String, String>(){{
-                    put("http-method", "GET");
-                    put("source-ip", "test-invoke-source-ip");
-                    put("resource-path", "/{path1}");
-                }});
-            }}, null)
+            }}, null).get("body")
         );
     }
 }

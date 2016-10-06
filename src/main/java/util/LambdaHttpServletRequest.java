@@ -39,29 +39,29 @@ import javax.servlet.http.Part;
 @SuppressWarnings("unchecked")
 public class LambdaHttpServletRequest implements HttpServletRequest {
 
-    private Map<String, Map<String, String>> params;
-    private Map<String, String> context;
+    private Map<String, Object> input;
+    private Map<String, Object> context;
+    private Map<String, String> identity;
     private Map<String, String> querystring;
     private Map<String, String> header;
     private String body;
 
-    public LambdaHttpServletRequest(Map<String, Object> lambdaPassThroughParams) {
-        this.params      = (Map<String, Map<String, String>>) lambdaPassThroughParams.get("params");
-        this.context     = (Map<String, String>) lambdaPassThroughParams.get("context");
-        this.querystring = params.get("querystring");
-        this.header      = params.get("header");
-        this.body        = lambdaPassThroughParams.get("body-json").toString();
+    public LambdaHttpServletRequest(Map<String, Object> lambdaProxyParams) {
+        this.input       = (Map<String, Object>) lambdaProxyParams.get("input");
+        this.context     = (Map<String, Object>) input.get("requestContext");
+        this.identity    = (Map<String, String>) context.get("identity");
+        this.querystring = (Map<String, String>) input.get("queryStringParameters");
+        this.header      = (Map<String, String>) input.get("headers");
+        this.body        = (String) input.get("body");
+        if (this.body == null) {
+            this.body = "";
+        }
     }
 
-    public String getMethod() { return (String) context.get("http-method"); }
+    public String getMethod() { return (String) input.get("httpMethod"); }
 
     public String getPathInfo() {
-        Map<String, String> pathParams = params.get("path");
-        String path = context.get("resource-path");
-        for(String key : pathParams.keySet()) {
-            path = path.replaceAll("\\{" + key + "\\}", pathParams.get(key));
-        }
-        return path;
+        return (String) input.get("path");
     }
 
     public String getPathTranslated() {
@@ -157,7 +157,7 @@ public class LambdaHttpServletRequest implements HttpServletRequest {
     }
 
     public String getRemoteAddr() {
-        return context.get("source-ip");
+        return identity.get("sourceIp");
     }
 
     public int getContentLength() {
@@ -165,7 +165,7 @@ public class LambdaHttpServletRequest implements HttpServletRequest {
     }
 
     public String getContentType() {
-        return "application/json";
+        return header.get("Content-Type");
     }
 
     public String getCharacterEncoding() {

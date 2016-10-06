@@ -1,5 +1,7 @@
 package util;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import java.util.Arrays;
@@ -7,6 +9,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.HashMap;
 import java.util.Set;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -16,11 +19,9 @@ import org.glassfish.jersey.servlet.ServletContainer;
 
 /**
  * Lambda handler implementation delegating the request to the Jersey's {@link ServletContainer}.
- * The handler creates a dummy HTTP request from the pass-through lambda parameters, then it uses a dummy HTTP response
- * object. Also the handler adds a filter to capture the response entity, and deletes it from the response, so that
- * Jersey does not waste time on serializing it, because this is something AWS already does.
  */
 public class JerseyRequestHandler implements RequestHandler<Map<String, Object>, Object> {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private final ServletContainer jersey;
 
@@ -34,7 +35,6 @@ public class JerseyRequestHandler implements RequestHandler<Map<String, Object>,
 
     public JerseyRequestHandler(ResourceConfig rs) {
         try {
-            rs.registerClasses(CapturingContainerResponseFilter.class);
             jersey = new ServletContainer(rs);
             jersey.init(new ServletConfig() {
                 public String getServletName() {
@@ -56,16 +56,31 @@ public class JerseyRequestHandler implements RequestHandler<Map<String, Object>,
     }
 
     @Override
-    public Object handleRequest(Map<String, Object> input, Context context) {
+    public Map<String, Object> handleRequest(Map<String, Object> input, Context context) {
         try {
             LambdaHttpServletRequest request = new LambdaHttpServletRequest(input);
             InMemoryHttpServletResponse response = new InMemoryHttpServletResponse();
             jersey.service(request, response);
-            return CapturingContainerResponseFilter.getEntity() != null ?
-                CapturingContainerResponseFilter.getEntity() :
-                (response.getStatus() + ": " + response.toString());
+            return new HashMap<String, Object>() {{
+                put("statusCode", response.getStatus());
+                put("headers", new HashMap<String, String>(){{
+                    for(String h : response.getHeaderNames()) {
+                        put(h, response.getHeader(h));
+                    }
+                }});
+                put("body", response.toString());
+            }};
         } catch (Exception e) {
-            return "500: " + e.getMessage();
+            logger.error("Failed to handle the request", e);
+            return new HashMap<String, Object>() {{
+                put("statusCode", 500);
+                put("headers", new HashMap<String, String>(){{
+                    put("Content-Type", "text/plain");
+                }});
+                put("body", "Internal Server Error");
+            }};
         }
     }
+
+
 }
