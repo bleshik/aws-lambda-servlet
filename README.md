@@ -1,7 +1,17 @@
-# AWS Lambda adapter for Jersey (JAX-RS implementation)
-The idea behind this little adapter is to have a way of running JAX-RS APIs on AWS Lambda. This apadater basically takes the incoming Lambda Event and transform it to an HTTP Servet Request and pass it directly to Jersey. Then it takes the resulted Jersey entity and returns it as the Lambda return value.
+# AWS Lambda adapter for Java's Servlets
+The idea behind this little adapter is to have a way of running APIs implemented in Java on AWS Lambda. This apadater basically takes the incoming Lambda Event and transform it to an HTTP Servet Request and pass it directly to the given servlet. No http server is used in this process.
 
-What you need is to create a class extending JerseyRequestHandler:
+So you just go like this:
+```
+public class ExampleAdapter extends ServletRequestHandler {
+    public ExampleAdapter() {
+        // here you just pass your servlet
+        super(new MyAwesomeServlet());
+    }
+}
+```
+
+Also there is an implementation for Jersey. What you need is to create a class extending JerseyRequestHandler:
 ```
 public class ExampleAdapter extends JerseyRequestHandler {
     public ExampleAdapter() {
