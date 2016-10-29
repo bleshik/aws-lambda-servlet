@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import javax.servlet.AsyncContext;
@@ -45,8 +46,14 @@ public class LambdaHttpServletRequest implements HttpServletRequest {
     private Map<String, String> querystring;
     private Map<String, String> header;
     private String body;
+    private final Optional<? extends SessionManager> sm;
 
     public LambdaHttpServletRequest(Map<String, Object> input) {
+        this(input, Optional.empty());
+    }
+
+    public LambdaHttpServletRequest(Map<String, Object> input, Optional<? extends SessionManager> sm) {
+        this.sm = sm;
         this.input = input;
         this.context = (Map<String, Object>) input.get("requestContext");
         if (this.context == null) {
@@ -105,9 +112,11 @@ public class LambdaHttpServletRequest implements HttpServletRequest {
 
     public String getServletPath() { return ""; }
 
-    public HttpSession getSession(boolean create) { return null; }
+    public HttpSession getSession(boolean create) {
+        return sm.map(m -> m.getSession(this, create)).orElse(null);
+    }
 
-    public HttpSession getSession() { return null; }
+    public HttpSession getSession() { return getSession(true); }
 
     public String changeSessionId() { return null; }
 
