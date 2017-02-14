@@ -106,7 +106,7 @@ public class ServletRequestHandler<T extends Servlet> implements RequestHandler<
                 put("headers", new HashMap<String, String>(){{
                     put("Content-Type", "text/plain");
                 }});
-                put("body", "Internal Server Error");
+                put("body", "Internal Server Error: " + e.getMessage());
             }};
         }
     }
