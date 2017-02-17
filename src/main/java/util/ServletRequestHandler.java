@@ -76,8 +76,8 @@ public class ServletRequestHandler<T extends Servlet> implements RequestHandler<
                         request,
                         response,
                         createFilterChain(
-                            filters.size() > 1 ? filters.subList(1, filters.size() - 1) : Collections.emptyList()
-                            )
+                            filters.size() > 1 ? filters.subList(1, filters.size()) : Collections.emptyList()
+                        )
                     );
                 }
             }
