@@ -151,10 +151,17 @@ public class LambdaHttpServletRequest implements HttpServletRequest {
     public String getAuthType() { return null; }
 
     public Cookie[] getCookies() {
-        List<Cookie> cookies = Arrays.asList(header.get("Cookie").split("; ")).stream().map(c -> {
-            return new Cookie(c.substring(0, c.indexOf("=")), c.substring(c.indexOf("=") + 1));
-        }).collect(Collectors.toList());
-        return cookies.toArray(new Cookie[cookies.size()]);
+        if (!header.containsKey("Cookie")) {
+            return new Cookie[0];
+        }
+        try {
+            List<Cookie> cookies = Arrays.asList(header.get("Cookie").split("; ")).stream().map(c -> {
+                return new Cookie(c.substring(0, c.indexOf("=")), c.substring(c.indexOf("=") + 1));
+            }).collect(Collectors.toList());
+            return cookies.toArray(new Cookie[cookies.size()]);
+        } catch (Exception e) {
+            return new Cookie[0];
+        }
     }
 
     public long getDateHeader(String name) {
