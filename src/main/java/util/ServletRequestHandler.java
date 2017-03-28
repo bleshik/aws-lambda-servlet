@@ -29,20 +29,22 @@ import org.slf4j.LoggerFactory;
 public class ServletRequestHandler<T extends Servlet> implements RequestHandler<Map<String, Object>, Object> {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    protected final String contextPath;
     protected final T servlet;
     protected final Optional<? extends SessionManager> sm;
     protected final List<Filter> filters;
 
-    public ServletRequestHandler(T servlet) {
-        this(servlet, Optional.empty(), Collections.emptyList());
+    public ServletRequestHandler(String contextPath, T servlet) {
+        this(contextPath, servlet, Optional.empty(), Collections.emptyList());
     }
 
-    public ServletRequestHandler(T servlet, Optional<? extends SessionManager> sm, Filter... filters) {
-        this(servlet, sm, Arrays.asList(filters));
+    public ServletRequestHandler(String contextPath, T servlet, Optional<? extends SessionManager> sm, Filter... filters) {
+        this(contextPath, servlet, sm, Arrays.asList(filters));
     }
 
-    public ServletRequestHandler(T servlet, Optional<? extends SessionManager> sm, List<Filter> filters) {
+    public ServletRequestHandler(String contextPath, T servlet, Optional<? extends SessionManager> sm, List<Filter> filters) {
         try {
+            this.contextPath = contextPath.replaceAll("^/*([^/]*)/*$", "/$1");
             this.filters = filters;
             this.sm      = sm;
             this.servlet = servlet;
@@ -84,10 +86,16 @@ public class ServletRequestHandler<T extends Servlet> implements RequestHandler<
         };
     }
 
+    protected Map<String, Object> removeContextPath(Map<String, Object> input) {
+        String path = (String) (input.get("path") != null ? input.get("path") : "/");
+        input.put("path", path.replaceAll("^" + this.contextPath + "/?", "/"));
+        return input;
+    }
+
     @Override
     public Map<String, Object> handleRequest(Map<String, Object> input, Context context) {
         try {
-            LambdaHttpServletRequest request = new LambdaHttpServletRequest(input, sm);
+            LambdaHttpServletRequest request = new LambdaHttpServletRequest(removeContextPath(input), sm);
             InMemoryHttpServletResponse response = new InMemoryHttpServletResponse();
             createFilterChain(filters).doFilter(request, response);
             return new HashMap<String, Object>() {{

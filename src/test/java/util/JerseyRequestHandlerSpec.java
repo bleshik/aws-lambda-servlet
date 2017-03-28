@@ -45,6 +45,7 @@ public class JerseyRequestHandlerSpec {
         assertEquals(
             new TestResource().test(),
             new JerseyRequestHandler(
+                "root",
                 new ResourceConfig(TestResource.class),
                 Optional.empty(),
                 new Filter() {
@@ -61,7 +62,7 @@ public class JerseyRequestHandlerSpec {
                 }
             ).handleRequest(new HashMap<String, Object>() {{
                 put("body", null);
-                put("path", "/test");
+                put("path", "/root/test");
                 put("httpMethod", "GET");
                 put("headers", new HashMap<String, String>());
                 put("queryStringParameters", new HashMap<String, String>());

@@ -15,24 +15,24 @@ import org.glassfish.jersey.servlet.ServletContainer;
  */
 public class JerseyRequestHandler extends ServletRequestHandler<ServletContainer> {
 
-    public JerseyRequestHandler(Class<?>... classes) {
-        this(new HashSet<Class<?>>(Arrays.asList(classes)));
+    public JerseyRequestHandler(String contextPath, Class<?>... classes) {
+        this(contextPath, new HashSet<Class<?>>(Arrays.asList(classes)));
     }
 
-    public JerseyRequestHandler(Set<Class<?>> classes) {
-        this(new ResourceConfig(classes));
+    public JerseyRequestHandler(String contextPath, Set<Class<?>> classes) {
+        this(contextPath, new ResourceConfig(classes));
     }
 
-    public JerseyRequestHandler(ResourceConfig rs) {
-        this(rs, Optional.empty(), Collections.emptyList());
+    public JerseyRequestHandler(String contextPath, ResourceConfig rs) {
+        this(contextPath, rs, Optional.empty(), Collections.emptyList());
     }
 
-    public JerseyRequestHandler(ResourceConfig rs, Optional<? extends SessionManager> sm, List<Filter> filters) {
-        super(new ServletContainer(rs), sm, filters);
+    public JerseyRequestHandler(String contextPath, ResourceConfig rs, Optional<? extends SessionManager> sm, List<Filter> filters) {
+        super(contextPath, new ServletContainer(rs), sm, filters);
     }
 
-    public JerseyRequestHandler(ResourceConfig rs, Optional<? extends SessionManager> sm, Filter... filters) {
-        super(new ServletContainer(rs), sm, filters);
+    public JerseyRequestHandler(String contextPath, ResourceConfig rs, Optional<? extends SessionManager> sm, Filter... filters) {
+        super(contextPath, new ServletContainer(rs), sm, filters);
     }
 
 }
