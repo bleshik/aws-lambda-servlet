@@ -109,15 +109,18 @@ public class ServletRequestHandler<T extends Servlet> implements RequestHandler<
             }};
         } catch (Exception e) {
             logger.error("Failed to handle the request", e);
-            return new HashMap<String, Object>() {{
-                put("statusCode", 500);
-                put("headers", new HashMap<String, String>(){{
-                    put("Content-Type", "text/plain");
-                }});
-                put("body", "Internal Server Error: " + e.getMessage());
-            }};
+            return lambdaHttpResponse(500, "Internal Server Error: " + e.getMessage());
         }
     }
 
+    protected Map<String, Object> lambdaHttpResponse(int code, String message) {
+        return new HashMap<String, Object>() {{
+            put("statusCode", code);
+            put("headers", new HashMap<String, String>(){{
+                put("Content-Type", "text/plain");
+            }});
+            put("body", message);
+        }};
+    }
 
 }
