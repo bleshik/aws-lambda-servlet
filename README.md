@@ -2,7 +2,32 @@
 # AWS Lambda adapter for Java's Servlets
 The idea behind this little adapter is to have a way of running APIs implemented in Java on AWS Lambda. This apadater basically takes the incoming Lambda Event and transform it to an HTTP Servet Request and pass it directly to the given servlet. No http server is used in this process.
 
-So you just go like this:
+Add the project's bintray repository in your pom.xml:
+```
+<repositories>
+    <repository>
+        <id>bintray</id>
+        <url>http://dl.bintray.com/bleshik/maven</url>
+        <releases>
+            <enabled>true</enabled>
+        </releases>
+        <snapshots>
+            <enabled>false</enabled>
+        </snapshots>
+    </repository>
+</repositories>
+```
+
+Then the dependency itself:
+```
+<dependency>
+    <groupId>com.github.bleshik</groupId>
+    <artifactId>aws-lambda-servlet</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
+Then you just go like this:
 ```
 public class ExampleAdapter extends ServletRequestHandler {
     public ExampleAdapter() {
