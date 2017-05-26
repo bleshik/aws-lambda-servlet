@@ -17,7 +17,7 @@
         "released": "2017-05-26",
         "gpgSign": false
     },
-    "files": [ {"includePattern": "target/aws-lambda-servlet-(.*).jar", "uploadPattern": "/com/github/bleshik/$1/aws-lambda-servlet-$1.jar"} ],
+    "files": [ {"includePattern": "target/aws-lambda-servlet-1.0.jar", "uploadPattern": "/com/github/bleshik/1.0/aws-lambda-servlet-1.0.jar"} ],
     "publish": true
 }
 
