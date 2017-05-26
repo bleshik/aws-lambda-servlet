@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/bleshik/aws-lambda-servlet.svg?branch=master)](https://travis-ci.org/bleshik/aws-lambda-servlet)
 # AWS Lambda adapter for Java's Servlets
 The idea behind this little adapter is to have a way of running APIs implemented in Java on AWS Lambda. This apadater basically takes the incoming Lambda Event and transform it to an HTTP Servet Request and pass it directly to the given servlet. No http server is used in this process.
 
