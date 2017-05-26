@@ -1,0 +1,8 @@
+language: java
+script: mvn install
+deploy:
+  provider: bintray
+  file: descriptor.json
+  user: bleshik
+  key:
+    secure: ZJB2Nvvqn6TZwX/+fbVSg9VwSNHtaVSWn/91INE3DmQ/hPtsrb6YXw+SEJpd0m9/5Ix/hysmiphhyO0Afmyp9BvRQSXxt2wzk51yLCuqx4k5AWdA4k8d/zfJbyqqjxlvztrtI+UBUwMj/piiz8V+CUW5uw/byitKePiQBkKCYUz+NN9XQIhiZKTbcfpcrRW/WDfCdzmfmofubPv1ljqYjgrLyatyaTj6gv/3x1Vj8FkaQiLL5f3+Fbn7d3T8KIYQClVDPyTUZrNkGb3SIk8nUlis+MuF1eSu2npeajnU8CFQS/QHuN1IOaMfI9YaJ0171jPn/P2F11QIF4mnQ9ZRWMx3Xe+7D+1RXTh7QUw1owbmk6HpH19eMAFlYCQ9YgABe0OspIDQdQH6z5ukfVQa6Z+KX0cwSK7gCEWwCKrWRoMmLAaBROTXf/MCSKH++omEZTxYXS8hIse45Ihk2SH2A+aAxBl+z1ZYiD1BcaafAzmLQaZJNIsyVc/Zge/ciNH9/C6cikPFS+tio4QAyUOpAWPhUiebgiBGvviraIPnUPmfgayfSqW8hB3wKxxF5zAdB9RpGoAYGRIB0NkYbodihgPP/sykioUiT/Yumj+B5AutEVQ2zJd6ZBG2V5KtgXDHAolc5jdmwMDczzzcHSGJ0uDJ5zwwpBFXFzBbTTwAUns=
