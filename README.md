@@ -31,8 +31,8 @@ Then you just go like this:
 ```
 public class ExampleAdapter extends ServletRequestHandler {
     public ExampleAdapter() {
-        // here you just pass your servlet
-        super(new MyAwesomeServlet());
+        // here you just pass context path and your servlet
+        super("/", new MyAwesomeServlet());
     }
 }
 ```
@@ -41,10 +41,10 @@ Also there is an implementation for Jersey. What you need is to create a class e
 ```
 public class ExampleAdapter extends JerseyRequestHandler {
     public ExampleAdapter() {
-        // here you just pass your resources
-        super(TestResource.class);
+        // here you just pass context path and your resources
+        super("/", TestResource.class);
         // or you could use the ResourceConfig directly
-        // super(new ResourceConfig(TestResource.class));
+        // super("/", new ResourceConfig(TestResource.class));
     }
 }
 ```
