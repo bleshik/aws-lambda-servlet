@@ -50,3 +50,5 @@ public class ExampleAdapter extends JerseyRequestHandler {
 ```
 
 Then you just deploy ExampleAdapter as a Lambda function and expose it through API Gateway.
+
+For the complete working example, see the corresponding directory: https://github.com/bleshik/aws-lambda-servlet/tree/master/examples/simple
