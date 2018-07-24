@@ -99,7 +99,8 @@ public class ServletRequestHandler<T extends Servlet> implements RequestHandler<
             InMemoryHttpServletResponse response = new InMemoryHttpServletResponse();
             createFilterChain(filters).doFilter(request, response);
             return new HashMap<String, Object>() {{
-                put("statusCode", response.getStatus());
+                int code = response.getStatus();
+                put("statusCode", code < 100 ? 200 : code);
                 put("headers", new HashMap<String, String>(){{
                     for(String h : response.getHeaderNames()) {
                         put(h, response.getHeader(h));
