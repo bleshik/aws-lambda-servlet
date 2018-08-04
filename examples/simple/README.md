@@ -1,4 +1,4 @@
-For details about this example check out the article:
+For details about this example check out the articles:
 
 Plain Old Servlet Example: https://medium.com/@AlexeyBalchunas/make-any-java-web-app-serverless-786119ffdf83
 
